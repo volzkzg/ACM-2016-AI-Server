@@ -200,7 +200,7 @@ def judge():
     # start working
     steps = 0
     empty_steps = 0
-    first_sit = seed_base % 2;
+    first_sit = 0
     now_sit = seed_base % 2
     Record = []
     init_board = []
