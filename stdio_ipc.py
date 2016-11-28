@@ -83,7 +83,7 @@ class ChildProcess():
 
     def exit(self):
         self.qmain.put({ 'command': 'exit' })
-        if self.child.poll() is not None:
+        if self.abused == 0 or self.abused == 2:
             self.child.kill()
         self.thread.join()
         self.stdin.close()
