@@ -16,9 +16,10 @@ from stdio_ipc import ChildProcess
 # 炮上下左右 4 5 6 7
 
 def action(ai):
+    message = ""
     try:
         ai.send('action\n')
-        message = ai.recv(timeout=1)
+        message = ai.recv(timeout=1.5)
         posx, posy, tox, toy = map(int, message.strip().split(' '))
     except Empty as e:
         return { 'err': 'timeout' }
@@ -90,9 +91,15 @@ def finish(winner, err0, err1):
 
      # kill ai and write stdio log
     if type(ai0) is not dict:
-        ai0.exit()
+        try:
+            ai0.exit()
+        except:
+            print("ai0 has gone unexpectedly.")
     if type(ai1) is not dict:
-        ai1.exit()
+        try:
+            ai1.exit()
+        except:
+            print("ai1 has gone unexpectedly.")
 
     # write result
     try:

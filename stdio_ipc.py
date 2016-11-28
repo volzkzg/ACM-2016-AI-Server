@@ -32,13 +32,12 @@ class ChildProcess():
 
                 elif op['command'] == 'send':
                     content = op['content']
-                    if self.abused == 0:
-                        if self.child.poll() is not None:
-                            self.abused = -1
-                            self.qthread.put('finish')
-                            raise Exception('program unexpectedly terminated')
-                        else:
-                            self.abused = 2
+                    if self.child.poll() is not None:
+                        self.abused = -1
+                        self.qthread.put('finish')
+                        raise Exception('program unexpectedly terminated')
+                    else:
+                        self.abused = 2
                     self.child.stdin.write(content)
                     self.child.stdin.flush()
                     self.stdin.write(content)
@@ -46,13 +45,12 @@ class ChildProcess():
 
                 elif op['command'] == 'recv':
                     content = ''
-                    if self.abused == 0:
-                        if self.child.poll() is not None:
-                            self.qthread.put('finish')
-                            self.abused = -1
-                            raise Exception("ERROR: Runtime error.")
-                        else:
-                            self.abused = 2
+                    if self.child.poll() is not None:
+                        self.qthread.put('finish')
+                        self.abused = -1
+                        raise Exception("ERROR: Runtime error.")
+                    else:
+                        self.abused = 2
                     while not content.endswith('END\n'):
                         chunk = self.child.stdout.readline()
                         if not chunk:
@@ -83,8 +81,7 @@ class ChildProcess():
 
     def exit(self):
         self.qmain.put({ 'command': 'exit' })
-        if self.abused == 0 or self.abused == 2:
-            self.child.kill()
+        self.child.kill()
         self.thread.join()
         self.stdin.close()
         self.stdout.close()
