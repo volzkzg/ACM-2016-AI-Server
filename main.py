@@ -10,6 +10,11 @@ from queue import Empty
 from pprint import pprint
 from stdio_ipc import ChildProcess
 
+# meaning of op
+# 翻面 -1
+# 上下左右 0 1 2 3
+# 炮上下左右 4 5 6 7
+
 def action(ai):
     try:
         ai.send('action\n')

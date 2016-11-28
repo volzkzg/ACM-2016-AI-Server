@@ -8,7 +8,7 @@ import os
 import resource
 
 def setrlimit():
-    m = 384 * 1024 * 1024
+    m = 1024 * 1024 * 1024
     resource.setrlimit(resource.RLIMIT_AS, (m, -1))
 
 class ChildProcess():
@@ -83,7 +83,7 @@ class ChildProcess():
 
     def exit(self):
         self.qmain.put({ 'command': 'exit' })
-        if self.abused == 0 or self.abused == 2:
+        if self.child.poll() is not None:
             self.child.kill()
         self.thread.join()
         self.stdin.close()
